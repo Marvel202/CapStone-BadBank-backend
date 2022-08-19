@@ -5,8 +5,7 @@ import mongoose from "mongoose";
 import Bank from "./models/Bank.js";
 
 const app = express();
-const mongoUrl =
-  "mongodb+srv://dbUser:8lmzdvs4HsBPK27o@badbank.y8uvcal.mongodb.net/bad_bank?retryWrites=true&w=majority";
+const mongoUrl = process.env.MONGO_STRING;
 const corsOptions = {
   origin: [
     "http://localhost:3000",
@@ -15,8 +14,6 @@ const corsOptions = {
 };
 mongoose
   .connect(mongoUrl)
-  // .db("bad-bank")
-  // .collection("account")
   .then((x) => {
     console.log(
       `connected to Mongo! Database name: ${x.connection.collections} `
@@ -32,26 +29,22 @@ app.use(express.json());
 
 //create user account
 
-app.post(
-  "/account/create",
-  // "/account/create",
-  async (req, res) => {
-    console.log("req.body", req.body);
-    const { firebaseId, username, email, balance } = req.body;
-    const account = {
-      firebaseId,
-      username,
-      email,
-      balance: 0,
-    };
-    try {
-      const createAccount = await Bank.create(account);
-      res.status(201).json(createAccount);
-    } catch (error) {
-      res.status(404).json(error.message);
-    }
+app.post("/account/create", async (req, res) => {
+  console.log("req.body", req.body);
+  const { firebaseId, username, email, balance } = req.body;
+  const account = {
+    firebaseId,
+    username,
+    email,
+    balance: 0,
+  };
+  try {
+    const createAccount = await Bank.create(account);
+    res.status(201).json(createAccount);
+  } catch (error) {
+    res.status(404).json(error.message);
   }
-);
+});
 
 // login user
 app.get("/account/login", async (req, res) => {
