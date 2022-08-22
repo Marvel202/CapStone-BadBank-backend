@@ -75,16 +75,21 @@ app.get("/account/:email", async (req, res) => {
   }
 });
 // update
-app.get("/account/update/:email", async (req, res) => {
+app.put("/account/update/:email", async (req, res) => {
   console.log("???", req.body);
-  try {
-    var bal = { balance: req.body.balance };
-    var filter = { email: req.params.email };
-    await Bank.findOneAndUpdate(filter, bal);
-    res.status(200).json({ message: `success` });
-  } catch (error) {
-    res.status(400).json(error.message);
-  }
+
+  var filter = { email: req.params.email };
+  await Bank.findOneAndUpdate(filter, (err, banks) => {
+    console.log(banks);
+    if (banks == null) {
+      err = new ErrorHandler(404, "Trans not found");
+      return next(err);
+    } else {
+      banks.deposits.push(req.body);
+      banks.deposits.save();
+      res.status(200).send("deposits created");
+    }
+  });
 });
 
 // account balance
