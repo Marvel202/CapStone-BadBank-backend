@@ -2,7 +2,7 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-import Bank from "./models/Bank.js";
+import Banks from "./models/Bank.js";
 
 const app = express();
 const mongoUrl = process.env.MONGO_STRING;
