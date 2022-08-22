@@ -25,7 +25,7 @@ mongoose
 // app.use(express.static("/"));
 app.use(cors(corsOptions));
 app.use(express.json());
-// app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 
 //create user account
 
@@ -49,11 +49,8 @@ app.post("/account/create", async (req, res) => {
 // login user
 app.get("/account/login", async (req, res) => {
   console.log("get req.body", req.body);
+  const { firebaseId, email } = req.body;
   try {
-    // const account = await Bank.find({
-    //   firebaseId: req.firebaseUser.uid,
-    // });
-    const { firebaseId, email } = req.body;
     const account = await Banks.find({
       firebaseId,
       email,
@@ -65,9 +62,9 @@ app.get("/account/login", async (req, res) => {
 });
 
 app.get("/account/:email", async (req, res) => {
-  try {
-    var filter = { email: req.params.email };
+  var filter = { email: req.params.email };
 
+  try {
     const account = await Banks.find(filter);
     res.status(200).json(account);
     console.log(account);
@@ -78,9 +75,9 @@ app.get("/account/:email", async (req, res) => {
 // update
 app.put("/account/update/:email", async (req, res) => {
   console.log("???", req.body);
+  var filter = { email: req.params.email };
 
   try {
-    var filter = { email: req.params.email };
     const account = await Banks.findOneAndUpdate(filter, req.body);
     res.status(200).json(account);
   } catch (error) {
