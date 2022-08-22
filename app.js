@@ -39,7 +39,7 @@ app.post("/account/create", async (req, res) => {
     balance: 0,
   };
   try {
-    const createAccount = await Bank.create(account);
+    const createAccount = await Banks.create(account);
     res.status(201).json(createAccount);
   } catch (error) {
     res.status(404).json(error.message);
@@ -54,13 +54,13 @@ app.get("/account/login", async (req, res) => {
     //   firebaseId: req.firebaseUser.uid,
     // });
     const { firebaseId, email } = req.body;
-    const account = await Bank.find({
+    const account = await Banks.find({
       firebaseId,
       email,
     });
     res.status(200).json(account);
   } catch (error) {
-    res.status(404).json({ mesage: `Bad request` });
+    res.status(404).json({ message: `Bad request` });
   }
 });
 
@@ -68,8 +68,9 @@ app.get("/account/:email", async (req, res) => {
   try {
     var filter = { email: req.params.email };
 
-    const account = await Bank.find(filter);
+    const account = await Banks.find(filter);
     res.status(200).json(account);
+    console.log(account);
   } catch (error) {
     res.send(error.message);
   }
@@ -78,18 +79,13 @@ app.get("/account/:email", async (req, res) => {
 app.put("/account/update/:email", async (req, res) => {
   console.log("???", req.body);
 
-  var filter = { email: req.params.email };
-  await Bank.findOneAndUpdate(filter, (err, banks) => {
-    console.log(banks);
-    if (banks == null) {
-      err = new ErrorHandler(404, "Trans not found");
-      return next(err);
-    } else {
-      banks.deposits.push(req.body);
-      banks.deposits.save();
-      res.status(200).send("deposits created");
-    }
-  });
+  try {
+    var filter = { email: req.params.email };
+    const account = await Banks.findOneAndUpdate(filter, req.body);
+    res.status(200).json(account);
+  } catch (error) {
+    res.send(error.message);
+  }
 });
 
 // account balance

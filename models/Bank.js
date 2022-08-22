@@ -1,8 +1,6 @@
 import mongoose from "mongoose";
 
-const TranSchema = new mongoose.Schema({ tran_date: Date, amount: Number });
-
-const bankSchema = new mongoose.Schema(
+const BankSchema = new mongoose.Schema(
   {
     firebaseId: {
       type: String,
@@ -20,17 +18,8 @@ const bankSchema = new mongoose.Schema(
       type: Number,
     },
 
-    deposits: {
-      type: [TranSchema],
-      default: undefined,
-    },
-
-    withdrawal: {
-      type: [TranSchema],
-      default: undefined,
-    },
-
-    // balance: Number,
+    deposits: [{ amount: Number, tran_date: Date }],
+    withdrawal: [{ amount: Number, tran_date: Date }],
   },
   {
     timestamps: {
@@ -40,4 +29,4 @@ const bankSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model("Bank", bankSchema, "Trans", TranSchema);
+export default mongoose.model("Banks", BankSchema);
