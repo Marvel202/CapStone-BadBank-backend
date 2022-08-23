@@ -9,7 +9,7 @@ const mongoUrl = process.env.MONGO_STRING;
 const corsOptions = {
   origin: [
     // "http://localhost:3000",
-    "http://ritakoonbankingapp.s3-website-us-west-2.amazonaws.com/",
+    "http://ritakoonbankingapp.s3-website-us-west-2.amazonaws.com",
     // 'process.env.PORT'
   ],
 };
