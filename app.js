@@ -9,6 +9,7 @@ const mongoUrl = process.env.MONGO_STRING;
 const corsOptions = {
   origin: [
     "http://localhost:3000",
+    "http://ritakoonbankingapp.s3-website-us-west-2.amazonaws.com/",
     // 'process.env.PORT'
   ],
 };
@@ -87,5 +88,5 @@ app.put("/account/update/:email", async (req, res) => {
 
 // account balance
 
-const port = process.env.PORT || 3003;
+const port = process.env.PORT;
 app.listen(port, () => console.log(`Server listening on port ${port}`));
